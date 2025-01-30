@@ -17,10 +17,8 @@ This is a **Telegram bot** that integrates **Google Gemini AI** to provide **int
 
 ## 🛠️ Installation  
 
-### 1️⃣ Clone the Repository  
-```bash
-git clone https://github.com/your-repo/telegram-ai-bot.git
-cd telegram-ai-project 
+pip install --upgrade google-generativeai grpcio
+
 pip install -r requirements.txt
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 MONGO_URI=your_mongodb_connection_string
