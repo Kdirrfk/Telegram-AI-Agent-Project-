@@ -34,7 +34,7 @@ files_col = db["files"]
 
 # Configure Gemini AI model
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")  # Updated to 1.5 flash
+model = genai.GenerativeModel("gemini-1.5-flash")  
 
 # Sentiment analysis function
 def analyze_sentiment(text):
