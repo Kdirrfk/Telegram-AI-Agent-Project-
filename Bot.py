@@ -12,11 +12,8 @@ import speech_recognition as sr
 from PIL import Image
 from googlesearch import search
 
-# Load environment variables
+
 load_dotenv(dotenv_path="pro.env")
-
-# Environment Variables
-
 os.environ["TELEGRAM_BOT_TOKEN"] = "7831386819:AAHC3li1_k_HkHtrg1pweho_Cd_7VQeBaCk"
 os.environ["MONGO_URI"] = "mongodb+srv://deepthi:deepusiri@deepthi.bqzr7.mongodb.net/?retryWrites=true&w=majority&appName=Deepthi"
 os.environ["GEMINI_API_KEY"] = "AIzaSyDyUtqy3nO5H1pLUuKQOWpOJ7wsZGsW1_I"
@@ -24,7 +21,6 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 MONGO_URI = os.getenv("MONGO_URI")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Initialize services
 bot = telebot.TeleBot(BOT_TOKEN)
 client = pymongo.MongoClient(MONGO_URI)
 db = client["TelegramBotDB"]
@@ -32,11 +28,9 @@ users_col = db["users"]
 chats_col = db["chats"]
 files_col = db["files"]
 
-# Configure Gemini AI model
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")  
 
-# Sentiment analysis function
 def analyze_sentiment(text):
     blob = TextBlob(text)
     sentiment = blob.sentiment.polarity
@@ -46,7 +40,6 @@ def analyze_sentiment(text):
         return "Negative 😞"
     return "Neutral 😐"
 
-# User Registration
 @bot.message_handler(commands=['start'])
 def start(message):
     user = users_col.find_one({"chat_id": message.chat.id})
@@ -70,7 +63,6 @@ def register_contact(message):
         })
         bot.send_message(message.chat.id, "✅ Registration successful!")
 
-# Gemini-Powered Chat
 @bot.message_handler(func=lambda message: True)
 def chat(message):
     bot.send_chat_action(message.chat.id, 'typing')
@@ -89,7 +81,6 @@ def chat(message):
     except Exception as e:
         bot.send_message(message.chat.id, f"⚠️ Error: {str(e)}")
 
-# Image/File Analysis
 @bot.message_handler(content_types=['photo', 'document'])
 def file_analysis(message):
     bot.send_message(message.chat.id, "✅ File received! Processing now...")
@@ -118,7 +109,6 @@ def file_analysis(message):
         bot.send_message(message.chat.id, f"⚠️ Error: {str(e)}")
         print("❌ ERROR:", e)
 
-# Voice Message Processing
 @bot.message_handler(content_types=['voice'])
 def handle_voice(message):
     bot.send_chat_action(message.chat.id, 'typing')
@@ -146,7 +136,6 @@ def handle_voice(message):
     except Exception as e:
         bot.send_message(message.chat.id, f"⚠️ Error: {str(e)}")
 
-# Web Search
 @bot.message_handler(commands=['websearch'])
 def web_search(message):
     bot.send_message(message.chat.id, "🌍 Enter your query for web search:")
@@ -163,6 +152,5 @@ def perform_web_search(message):
     except Exception as e:
         bot.send_message(message.chat.id, f"⚠️ Error: {str(e)}")
 
-# Run the bot
 print("🤖 Bot is running...")
 bot.polling(none_stop=True)
